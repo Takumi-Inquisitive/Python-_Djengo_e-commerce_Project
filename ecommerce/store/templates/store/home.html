@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechStore - Futuristic Tech Products</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav glass">
+        <div class="nav-container">
+            <a href="{% url 'home' %}" class="text-gradient">TechStore</a>
+            <div class="nav-links">
+                <a href="{% url 'product_list' %}" class="nav-link">Products</a>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'cart' %}" class="cart-icon">
+                        <span class="cart-count">{{ cart_count|default:0 }}</span>
+                        <i class="fas fa-shopping-cart"></i>
+                    </a>
+                    <a href="{% url 'logout' %}" class="nav-link">Logout</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="nav-link">Login</a>
+                    <a href="{% url 'register' %}" class="btn btn-primary">Register</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="text-gradient hero-title">The Future of Tech is Here</h1>
+            <p class="hero-subtitle">Discover cutting-edge products that redefine what's possible</p>
+            <a href="{% url 'product_list' %}" class="btn btn-primary hero-cta">Shop Now</a>
+        </div>
+        <div class="hero-overlay"></div>
+    </section>
+
+    <!-- Featured Products Section -->
+    <section class="featured-section container">
+        <h2 class="section-title text-gradient">Featured Products</h2>
+        <div class="product-grid">
+            {% for product in featured_products %}
+                <div class="product-card glass">
+                    <div class="product-image">
+                        {% if product.image %}
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                        {% else %}
+                            <div class="placeholder-image"></div>
+                        {% endif %}
+                    </div>
+                    <div class="product-info">
+                        <h3>{{ product.name }}</h3>
+                        <p class="price">${{ product.price }}</p>
+                        <p class="stock">Stock: {{ product.stock_qt }}</p>
+                        
+                        <form action="{% url 'add_to_cart' product.id %}" method="POST" class="product-form">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary add-to-cart-btn">
+                                Add to Cart
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="section-footer">
+            <a href="{% url 'product_list' %}" class="btn btn-secondary">View All Products</a>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="categories-section">
+        <div class="container">
+            <h2 class="section-title text-gradient">Shop by Category</h2>
+            <div class="categories-grid">
+                <a href="{% url 'product_list' %}?category=electronics" class="category-card glass">
+                    <div class="category-icon">
+                        <i class="fas fa-laptop"></i>
+                    </div>
+                    <h3>Electronics</h3>
+                    <p>Latest gadgets and devices</p>
+                </a>
+                <a href="{% url 'product_list' %}?category=accessories" class="category-card glass">
+                    <div class="category-icon">
+                        <i class="fas fa-headphones"></i>
+                    </div>
+                    <h3>Accessories</h3>
+                    <p>Enhance your tech experience</p>
+                </a>
+                <a href="{% url 'product_list' %}?category=smart-home" class="category-card glass">
+                    <div class="category-icon">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <h3>Smart Home</h3>
+                    <p>Automate your living space</p>
+                </a>
+                <a href="{% url 'product_list' %}?category=gaming" class="category-card glass">
+                    <div class="category-icon">
+                        <i class="fas fa-gamepad"></i>
+                    </div>
+                    <h3>Gaming</h3>
+                    <p>Level up your gaming setup</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reviews Section -->
+    <section class="reviews-section container">
+        <h2 class="section-title text-gradient">What Our Customers Say</h2>
+        <div class="reviews-slider">
+            <div class="review-card glass">
+                <div class="review-header">
+                    <img src="{% static 'images/avatar1.png' %}" alt="Customer Avatar" class="review-avatar">
+                    <div class="review-info">
+                        <h4>Alex Johnson</h4>
+                        <div class="star-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+                <p class="review-text">"The quality of products is outstanding! Fast shipping and excellent customer service. Will definitely shop here again!"</p>
+            </div>
+            <div class="review-card glass">
+                <div class="review-header">
+                    <img src="{% static 'images/avatar2.png' %}" alt="Customer Avatar" class="review-avatar">
+                    <div class="review-info">
+                        <h4>Sarah Chen</h4>
+                        <div class="star-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                    </div>
+                </div>
+                <p class="review-text">"I love the futuristic design of the products. The website is easy to navigate and the checkout process was smooth."</p>
+            </div>
+            <div class="review-card glass">
+                <div class="review-header">
+                    <img src="{% static 'images/avatar3.png' %}" alt="Customer Avatar" class="review-avatar">
+                    <div class="review-info">
+                        <h4>Michael Rodriguez</h4>
+                        <div class="star-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+                <p class="review-text">"The tech products here are cutting-edge and the prices are competitive. My new smart home setup is amazing!"</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="newsletter-section">
+        <div class="container">
+            <div class="newsletter-container glass">
+                <h2 class="text-gradient">Stay Updated</h2>
+                <p>Subscribe to our newsletter for the latest tech products and exclusive deals</p>
+                <form class="newsletter-form">
+                    <input type="email" placeholder="Your email address" required>
+                    <button type="submit" class="btn btn-primary">Subscribe</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h3 class="text-gradient">TechStore</h3>
+                    <p>Your destination for cutting-edge tech products and accessories.</p>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h4>Shop</h4>
+                    <ul class="footer-links">
+                        <li><a href="{% url 'product_list' %}">All Products</a></li>
+                        <li><a href="{% url 'product_list' %}?category=electronics">Electronics</a></li>
+                        <li><a href="{% url 'product_list' %}?category=accessories">Accessories</a></li>
+                        <li><a href="{% url 'product_list' %}?category=smart-home">Smart Home</a></li>
+                        <li><a href="{% url 'product_list' %}?category=gaming">Gaming</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Customer Service</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Shipping & Returns</a></li>
+                        <li><a href="#">FAQs</a></li>
+                        <li><a href="#">Track Order</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Company</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms & Conditions</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 TechStore. All rights reserved.</p>
+                <div class="payment-methods">
+                    <i class="fab fa-cc-visa"></i>
+                    <i class="fab fa-cc-mastercard"></i>
+                    <i class="fab fa-cc-amex"></i>
+                    <i class="fab fa-cc-paypal"></i>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/app.js' %}"></script>
+</body>
+</html> 
