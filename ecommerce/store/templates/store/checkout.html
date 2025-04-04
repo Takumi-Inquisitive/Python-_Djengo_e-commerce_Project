@@ -90,7 +90,7 @@
                     {% for item in cart_items %}
                         <div class="summary-item">
                             <span>{{ item.product.name }} x {{ item.quantity }}</span>
-                            <span>${{ item.product.price|multiply:item.quantity }}</span>
+                            <span>${{ item.total_price }}</span> <!-- Updated line to display total_price -->
                         </div>
                     {% endfor %}
                 </div>

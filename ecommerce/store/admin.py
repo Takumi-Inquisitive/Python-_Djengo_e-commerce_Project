@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Product, Category, Cart, Order, Payment, Client, Invoice, InvoiceItem, StockReport
+from .models import Product, Category,Client, Invoice, InvoiceItem,  Cart, Order, Payment, StockReport
 
 # Product Management
 class ProductAdmin(admin.ModelAdmin):

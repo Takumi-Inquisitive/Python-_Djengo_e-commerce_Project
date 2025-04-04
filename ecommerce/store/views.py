@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, logout as auth_logout
 from .forms import ReviewForm
+from .models import CartItem
 
 def home(request):
    
@@ -101,30 +102,13 @@ def remove_from_cart(request, product_id):
 
 @login_required
 def checkout(request):
-    cart_items = Cart.objects.filter(user=request.user)
+    cart_items = CartItem.objects.all()  
 
-    if not cart_items:
-        return redirect('cart')
+   
+    for item in cart_items:
+        item.total_price = item.product.price * item.quantity
 
-    total_price = sum(item.product.price * item.quantity for item in cart_items)
-
-    if request.method == 'POST':
-        order = Order.objects.create(user=request.user, is_paid=True)
-
-        for item in cart_items:
-            
-            order_item = OrderItem.objects.create(
-                order=order,
-                product=item.product,
-                quantity=item.quantity,
-                price=item.product.price  
-            )
-
-        cart_items.delete()
-
-        return redirect('order_summary', order_id=order.id)
-
-    return render(request, 'store/checkout.html', {'cart_items': cart_items, 'total_price': total_price})
+    return render(request, 'store/checkout.html', {'cart_items': cart_items})
 
 @login_required
 def order_summary(request, order_id):
