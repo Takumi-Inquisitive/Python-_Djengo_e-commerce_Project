@@ -51,11 +51,11 @@
     {% for product in products %}
         <div class="product-card glass">
             <a href="{% url 'product_detail' product.id %}" class="product-link">
-                <!-- Check if the product has an image -->
+              
                 {% if product.image %}
                     <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image">
                 {% else %}
-                    <!-- Use a placeholder image if no image is assigned -->
+                  
                     <img src="{% static 'images/placeholder.jpg' %}" alt="No Image Available" class="product-image">
                 {% endif %}
                 <h2>{{ product.name }}</h2>
